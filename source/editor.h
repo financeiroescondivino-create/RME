@@ -120,6 +120,7 @@ public: // Functions
 	void borderizeMap(bool showdialog);
 	void randomizeMap(bool showdialog);
 	void clearInvalidHouseTiles(bool showdialog);
+	void clearWrongSpawns(bool showdialog);
 	void clearModifiedTileState(bool showdialog);
 
 	// Draw using the current brush to the target position

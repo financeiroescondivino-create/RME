@@ -981,6 +981,38 @@ void Editor::clearInvalidHouseTiles(bool showdialog) {
 	}
 }
 
+void Editor::clearWrongSpawns(bool showdialog) {
+	if (showdialog) {
+		g_gui.CreateLoadBar("Clearing wrong spawns...");
+	}
+
+	uint64_t tiles_done = 0;
+	uint32_t removed = 0;
+	for (MapIterator map_iter = map.begin(); map_iter != map.end(); ++map_iter) {
+		if (showdialog && tiles_done % 4096 == 0) {
+			g_gui.SetLoadDone(int(tiles_done / double(map.tilecount) * 100.0));
+		}
+
+		Tile* tile = (*map_iter)->get();
+		ASSERT(tile);
+		if (tile->spawn) {
+			// Check if tile has no ground (empty, water, mountain, etc.)
+			if (!tile->hasGround()) {
+				map.removeSpawn(tile);
+				delete tile->spawn;
+				tile->spawn = nullptr;
+				++removed;
+			}
+		}
+		++tiles_done;
+	}
+
+	if (showdialog) {
+		g_gui.DestroyLoadBar();
+		wxMessageBox(wxString::Format("Removed %u wrong spawns.", removed), "Clear Wrong Spawns", wxOK | wxICON_INFORMATION);
+	}
+}
+
 void Editor::clearModifiedTileState(bool showdialog) {
 	if (showdialog) {
 		g_gui.CreateLoadBar("Clearing modified state from all tiles...");

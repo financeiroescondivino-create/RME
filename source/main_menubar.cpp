@@ -112,6 +112,7 @@ MainMenuBar::MainMenuBar(MainFrame* frame) :
 	MAKE_ACTION(EDIT_MONSTERS, wxITEM_NORMAL, OnMapEditMonsters);
 
 	MAKE_ACTION(CLEAR_INVALID_HOUSES, wxITEM_NORMAL, OnClearHouseTiles);
+	MAKE_ACTION(CLEAR_WRONG_SPAWNS, wxITEM_NORMAL, OnClearWrongSpawns);
 	MAKE_ACTION(CLEAR_MODIFIED_STATE, wxITEM_NORMAL, OnClearModifiedState);
 	MAKE_ACTION(MAP_REMOVE_ITEMS, wxITEM_NORMAL, OnMapRemoveItems);
 	MAKE_ACTION(MAP_REMOVE_CORPSES, wxITEM_NORMAL, OnMapRemoveCorpses);
@@ -418,6 +419,7 @@ void MainMenuBar::Update() {
 	EnableItem(MAP_REMOVE_CORPSES, is_local);
 	EnableItem(MAP_REMOVE_UNREACHABLE_TILES, is_local);
 	EnableItem(CLEAR_INVALID_HOUSES, is_local);
+	EnableItem(CLEAR_WRONG_SPAWNS, is_local);
 	EnableItem(CLEAR_MODIFIED_STATE, is_local);
 
 	EnableItem(EDIT_TOWNS, is_local);
@@ -1488,6 +1490,25 @@ void MainMenuBar::OnClearHouseTiles(wxCommandEvent& WXUNUSED(event)) {
 	if (ret == wxID_YES) {
 		// Editor will do the work
 		editor->clearInvalidHouseTiles(true);
+	}
+
+	g_gui.RefreshView();
+}
+
+void MainMenuBar::OnClearWrongSpawns(wxCommandEvent& WXUNUSED(event)) {
+	Editor* editor = g_gui.GetCurrentEditor();
+	if (!editor) {
+		return;
+	}
+
+	int ret = g_gui.PopupDialog(
+		"Clear Wrong Spawns",
+		"Are you sure you want to remove all spawns on non-ground tiles (water, mountains, empty tiles)? This action cannot be undone.",
+		wxYES | wxNO
+	);
+
+	if (ret == wxID_YES) {
+		editor->clearWrongSpawns(true);
 	}
 
 	g_gui.RefreshView();

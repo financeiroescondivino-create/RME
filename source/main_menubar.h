@@ -70,6 +70,7 @@ namespace MenuBar {
 		JUMP_TO_BRUSH,
 		JUMP_TO_ITEM_BRUSH,
 		CLEAR_INVALID_HOUSES,
+		CLEAR_WRONG_SPAWNS,
 		CLEAR_MODIFIED_STATE,
 		CUT,
 		COPY,
@@ -230,6 +231,7 @@ public:
 	void OnMapRemoveCorpses(wxCommandEvent& event);
 	void OnMapRemoveUnreachable(wxCommandEvent& event);
 	void OnClearHouseTiles(wxCommandEvent& event);
+	void OnClearWrongSpawns(wxCommandEvent& event);
 	void OnClearModifiedState(wxCommandEvent& event);
 	void OnToggleAutomagic(wxCommandEvent& event);
 	void OnSelectionTypeChange(wxCommandEvent& event);
