@@ -54,6 +54,10 @@ jobs:
           vcpkgGitCommitId: ${{ env.VCPKG_COMMIT }}
           vcpkgJsonGlob: 'vcpkg.json'
 
+      - name: Clean build
+        shell: bash
+        run: rm -rf build
+
       - name: Configure CMake
         shell: pwsh
         run: |
@@ -61,7 +65,10 @@ jobs:
             -DCMAKE_TOOLCHAIN_FILE="$env:VCPKG_ROOT/scripts/buildsystems/vcpkg.cmake" `
             -DVCPKG_TARGET_TRIPLET=x64-windows-static `
             -DVCPKG_INSTALL_OPTIONS="--clean-after-build" `
-            -DCMAKE_BUILD_TYPE=Release
+            -DCMAKE_BUILD_TYPE=Release `
+            -DSOL_LUA_VERSION=504 `
+            -DLUA_VERSION=5.4 `
+            -DSOL_LUAJIT=OFF
 
       - name: Build
         shell: pwsh
